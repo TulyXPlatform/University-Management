@@ -37,29 +37,53 @@ The project is based on Microsoft's **Contoso University tutorial** and showcase
 ContosoUniversity
 │
 ├── Controllers
+
 │ ├── StudentsController.cs
+
 │ ├── CoursesController.cs
+
 │ ├── InstructorsController.cs
+
 │
+
 ├── Models
+
 │ ├── Student.cs
+
 │ ├── Course.cs
+
 │ ├── Enrollment.cs
+
 │ ├── Instructor.cs
+
 │
+
 ├── Data
+
 │ └── SchoolContext.cs
+
 │
+
 ├── Views
+
 │ ├── Students
+
 │ ├── Courses
+
 │ ├── Instructors
+
 │
+
 ├── wwwroot
+
 │ ├── css
+
 │ ├── js
+
 │ └── images
+
 │
+
 └── appsettings.json
 
 
