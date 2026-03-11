@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ContosoUniversity.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Manage Roles";
+    var roles = ViewBag.Roles as IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>;
+}
+
+<h2 style="color:#1b3b2d; margin-bottom:20px;">Manage Roles</h2>
+
+<!-- Back link -->
+<a href="javascript:history.back()" class="btn btn-secondary mb-3" style="background-color:#2f5b44; color:#f5f0e1; border:none;">&larr; Back</a>
+
+<table class="table" style="background-color:#f5f0e1; color:#1b3b2d; border:2px solid #1b3b2d;">
+    <thead style="background-color:#1b3b2d; color:#f5f0e1;">
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    @using (Html.BeginForm("UpdateRole", "Admin", FormMethod.Post))
+                    {
+                        @Html.Hidden("userId", user.Id)
+                        <select name="roleName" class="form-control me-2" style="width:auto; display:inline-block;">
+                            @foreach (var role in roles)
+                            {
+                                <option value="@role.Name" @(user.Roles.Any(r => r.RoleId == role.Id) ? "selected" : "")>@role.Name</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .table th, .table td {
+        padding: 12px;
+        border-bottom: 1px solid #d9cfae;
+    }
+
+    .table tr:hover {
+        background-color: #e9e2cf;
+    }
+
+    .btn-primary {
+        background-color: #1b3b2d;
+        border-color: #1b3b2d;
+    }
+
+        .btn-primary:hover {
+            background-color: #2f5b44;
+            border-color: #2f5b44;
+        }
+
+    .btn-secondary:hover {
+        background-color: #1b3b2d;
+        color: #f5f0e1;
+    }
+</style>

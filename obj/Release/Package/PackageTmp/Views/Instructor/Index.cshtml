@@ -1,0 +1,181 @@
+﻿@model ContosoUniversity.ViewModels.InstructorIndexData
+@{
+    ViewBag.Title = "Instructors";
+}
+
+<!-- Page Header -->
+<div class="text-white text-center py-4 mb-4" style="background-color:#1b3b2d;">
+    <h1 class="fw-bold" style="font-size:2.2rem;">Instructor Management</h1>
+    <p class="mb-0">Overview of instructors, courses, and enrollments</p>
+</div>
+
+<div class="container">
+
+    <!-- Create Button -->
+    <div class="text-end mb-3">
+        <a href="@Url.Action("Create")"
+           class="btn btn-lg"
+           style="background-color:#2f5b44; color:#f5f0e1;">
+            + Add Instructor
+        </a>
+    </div>
+
+    <!-- Instructor List -->
+    <div class="card shadow border-0 mb-4">
+        <div class="card-header text-white py-2" style="background-color:#2f5b44;">
+            <h5 class="mb-0">Instructors</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0" style="background-color:#f5f0e1;">
+                <thead style="background-color:#1b3b2d; color:white;">
+                    <tr>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Hire Date</th>
+                        <th>Office</th>
+                        <th>Courses</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Instructors)
+                    {
+                        string selectedRow = item.ID == ViewBag.InstructorID ? "table-success" : "";
+
+                        <tr class="@selectedRow" style="vertical-align:middle;">
+                            <td>@item.LastName</td>
+                            <td>@item.FirstMidName</td>
+                            <td>@item.HireDate.ToShortDateString()</td>
+                            <td>
+                                @if (item.OfficeAssignment != null)
+                                {
+                                    <span class="badge"
+                                          style="background-color:#1b3b2d; color:#f5f0e1;">
+                                        @item.OfficeAssignment.Location
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">None</span>
+                                }
+                            </td>
+
+                            <td>
+                                @foreach (var course in item.Courses)
+                                {
+                                    <span class="badge text-dark mb-1"
+                                          style="background-color:#e7e2d3; font-weight:500;">
+                                        @course.CourseID - @course.Title
+                                    </span><br />
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                <a href="@Url.Action("Index", new { id = item.ID })"
+                                   class="btn btn-sm"
+                                   style="background-color:#1b3b2d; color:#f5f0e1;">Select</a>
+
+                                <a href="@Url.Action("Edit", new { id = item.ID })"
+                                   class="btn btn-sm btn-warning">Edit</a>
+
+                                <a href="@Url.Action("Details", new { id = item.ID })"
+                                   class="btn btn-sm btn-secondary">Details</a>
+
+                                <a href="@Url.Action("Delete", new { id = item.ID })"
+                                   class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Courses of Selected Instructor -->
+    @if (Model.Courses != null)
+    {
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header text-white py-2" style="background-color:#2f5b44;">
+                <h5 class="mb-0">Courses Taught by Selected Instructor</h5>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0" style="background-color:#f5f0e1;">
+                    <thead style="background-color:#1b3b2d; color:white;">
+                        <tr>
+                            <th></th>
+                            <th>Number</th>
+                            <th>Title</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Courses)
+                        {
+                            string selectedRow = item.CourseID == ViewBag.CourseID ? "table-success" : "";
+
+                            <tr class="@selectedRow">
+                                <td>
+                                    <a href="@Url.Action("Index", new { courseID = item.CourseID })"
+                                       class="btn btn-sm"
+                                       style="background-color:#1b3b2d; color:#f5f0e1;">
+                                        Select
+                                    </a>
+                                </td>
+                                <td>@item.CourseID</td>
+                                <td>@item.Title</td>
+                                <td>@item.Department.Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <!-- Students in Selected Course -->
+    @if (Model.Enrollments != null)
+    {
+        <div class="card shadow border-0">
+            <div class="card-header text-white py-2" style="background-color:#2f5b44;">
+                <h5 class="mb-0">Students Enrolled in Selected Course</h5>
+            </div>
+
+            <table class="table mb-0" style="background-color:#f5f0e1;">
+                <thead style="background-color:#1b3b2d; color:white;">
+                    <tr>
+                        <th>Name</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Enrollments)
+                    {
+                        <tr>
+                            <td>@item.Student.FullName</td>
+                            <td>@item.Grade</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+
+<!-- Hover Effects -->
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #e7e2d3;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.85;
+    }
+</style>

@@ -1,0 +1,79 @@
+﻿@model ContosoUniversity.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title" style="color:#1b3b2d; margin-bottom:20px;">@ViewBag.Title</h2>
+
+    @if (!string.IsNullOrEmpty(ViewBag.StatusMessage))
+    {
+        <p class="text-success">@ViewBag.StatusMessage</p>
+    }
+
+    <!-- Manage Roles Button -->
+    <a href="@Url.Action("ManageRoles", "Admin")"
+       class="btn btn-primary mb-4"
+       style="background-color:#1b3b2d; color:#f5f0e1; border:none;">
+        Manage Roles
+    </a>
+
+    <div class="card p-4" style="background-color:#f5f0e1; border:2px solid #1b3b2d;">
+        <h4 style="color:#1b3b2d;">Change your account settings</h4>
+        <hr />
+
+        <dl class="dl-horizontal">
+            <dt>Password:</dt>
+            <dd>
+                [
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Change your password", "ChangePassword", null, new { @class = "btn-link" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create", "SetPassword", null, new { @class = "btn-link" })
+                }
+                ]
+            </dd>
+
+            <dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink("Manage", "ManageLogins", null, new { @class = "btn-link" }) ]
+            </dd>
+
+            <dt>Two-Factor Authentication:</dt>
+            <dd>
+                <p style="color:#2f4f3f;">
+                    There are no two-factor authentication providers configured. See
+                    <a href="https://go.microsoft.com/fwlink/?LinkId=403804" target="_blank">this article</a>
+                    for details on enabling two-factor authentication.
+                </p>
+            </dd>
+        </dl>
+    </div>
+</main>
+
+<style>
+    dt {
+        font-weight: bold;
+        color: #1b3b2d;
+        margin-top: 10px;
+    }
+
+    dd {
+        margin-left: 20px;
+        margin-bottom: 10px;
+    }
+
+    .btn-link {
+        color: #1b3b2d;
+        text-decoration: underline;
+    }
+
+        .btn-link:hover {
+            color: #2f5b44;
+            text-decoration: none;
+        }
+</style>

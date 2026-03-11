@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ContosoUniversity.ViewModels.CourseVM>
+
+<h3 class="mb-3">Courses</h3>
+
+<table class="table table-hover table-bordered shadow-sm">
+    <thead style="background-color:#1b3b2d; color:white;">
+        <tr>
+            <th>Title</th>
+            <th>Credits</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Title</td>
+                <td>@c.Credits</td>
+                <td class="text-center">
+                    <button class="btn btn-sm loadEnrollments"
+                            style="background-color:#1b3b2d; color:#f5f0e1;"
+                            data-id="@c.CourseID">
+                        Enrollments
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

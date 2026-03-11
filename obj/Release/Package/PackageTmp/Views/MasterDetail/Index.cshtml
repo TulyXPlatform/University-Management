@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ContosoUniversity.ViewModels.DepartmentVM>
+
+@{
+    ViewBag.Title = "Departments";
+}
+
+<div class="container">
+
+    <h2 class="mb-4">Departments</h2>
+
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model)
+            {
+                <tr>
+                    <td>@d.Name</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm loadCourses"
+                                style="background-color:#1b3b2d; color:#f5f0e1;"
+                                data-id="@d.DepartmentID">
+                            View Courses
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="coursesArea" class="mt-4"></div>
+    <div id="enrollmentArea" class="mt-4"></div>
+
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/masterdetail.js"></script>
+}

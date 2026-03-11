@@ -1,0 +1,21 @@
+﻿@model IEnumerable<ContosoUniversity.ViewModels.EnrollmentVM>
+
+<h3 class="mb-3">Enrollments</h3>
+
+<table class="table table-hover table-bordered shadow-sm">
+    <thead style="background-color:#1b3b2d; color:white;">
+        <tr>
+            <th>Student Name</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model)
+        {
+            <tr>
+                <td>@e.StudentName</td>
+                <td>@e.Grade</td>
+            </tr>
+        }
+    </tbody>
+</table>

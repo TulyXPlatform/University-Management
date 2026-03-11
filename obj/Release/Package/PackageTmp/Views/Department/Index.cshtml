@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ContosoUniversity.Models.Department>
+
+@{
+    ViewBag.Title = "Departments";
+}
+
+<!-- Page Header -->
+<div class="text-white text-center py-4 mb-4" style="background-color:#1b3b2d;">
+    <h1 class="fw-bold" style="font-size:2.2rem;">Department Management</h1>
+    <p class="mb-0">Overview of departments and their administrators</p>
+</div>
+
+<div class="container">
+
+    <!-- Create Button -->
+    <div class="text-end mb-3">
+        <a href="@Url.Action("Create")"
+           class="btn btn-lg"
+           style="background-color:#2f5b44; color:#f5f0e1;">
+            + Add Department
+        </a>
+    </div>
+
+    <!-- Department List -->
+    <div class="card shadow border-0">
+        <div class="card-header text-white py-2" style="background-color:#2f5b44;">
+            <h5 class="mb-0">Departments</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0" style="background-color:#f5f0e1;">
+                <thead style="background-color:#1b3b2d; color:white;">
+                    <tr>
+                        <th>Last Name</th>
+                        <th>Name</th>
+                        <th>Budget</th>
+                        <th>Start Date</th>
+                        <th>Administrator</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="vertical-align:middle;">
+                            <td>@Html.DisplayFor(modelItem => item.Administrator.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@String.Format("{0:C}", item.Budget)</td>
+                            <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                            <td>@Html.DisplayFor(modelItem => item.Administrator.FullName)</td>
+
+                            <td class="text-center">
+                                <a href="@Url.Action("Edit", new { id = item.DepartmentID })"
+                                   class="btn btn-sm btn-warning"
+                                   style=" color:black;">Edit</a>
+
+                                <a href="@Url.Action("Details", new { id = item.DepartmentID })"
+                                   class="btn btn-sm"
+                                   style="background-color:#6c757d; color:white;">Details</a>
+
+                                <a href="@Url.Action("Delete", new { id = item.DepartmentID })"
+                                   class="btn btn-sm"
+                                   style="background-color:#d9534f; color:white;">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Hover Effects -->
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #e7e2d3;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.85;
+    }
+</style>

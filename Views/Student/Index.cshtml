@@ -1,0 +1,189 @@
+﻿@model PagedList.IPagedList<ContosoUniversity.Models.Student>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Students";
+}
+
+<!-- Header -->
+<div class="text-white text-center py-4 mb-4" style="background-color:#1b3b2d;">
+    <h1 class="fw-bold" style="font-size:2.2rem;">Student Directory</h1>
+    <p class="mb-0">Explore all registered students</p>
+</div>
+
+<div class="container">
+
+    <!-- Search + Create Button Row -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            @using (Html.BeginForm("Index", "Student", FormMethod.Get))
+            {
+                <div class="input-group">
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string,
+                        new { @class = "form-control", placeholder = "Search by name..." })
+
+                    <button class="btn" type="submit" style="background-color:#1b3b2d; color:#f5f0e1;">
+                        Search
+                    </button>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a href="@Url.Action("Create")"
+               class="btn btn-lg"
+               style="background-color:#2f5b44; color:#f5f0e1;">
+                + Add Student
+            </a>
+        </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card shadow border-0">
+        <div class="card-header text-white py-2" style="background-color:#2f5b44;">
+            <h5 class="mb-0">Student List</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0" style="background-color:#f5f0e1;">
+                <thead style="background-color:#1b3b2d; color:white;">
+                    <tr>
+                        <th>Photo</th>
+
+                        <!-- Last Name Sorting -->
+                        <th>
+                            @Html.ActionLink(
+                                linkText: "Last Name",
+                                actionName: "Index",
+                                routeValues: new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter },
+                                htmlAttributes: new { @class = "text-black" })
+                        </th>
+
+                        <th>First Name</th>
+
+                        <!-- Enrollment Date Sorting -->
+                        <th>
+                            @Html.ActionLink(
+                                linkText: "Enrollment Date",
+                                actionName: "Index",
+                                routeValues: new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter },
+                                htmlAttributes: new { @class = "text-black" })
+                        </th>
+
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="vertical-align: middle;">
+
+                            <!-- Photo -->
+                            <td style="width:90px;">
+                                @if (item.PictureData != null)
+                                {
+                                    <img src="@Url.Action("GetImage", "Student", new { id = item.ID })"
+                                         class="img-thumbnail shadow-sm"
+                                         style="width:75px; height:75px; object-fit:cover; border-radius:6px;" />
+                                }
+                                else
+                                {
+                                    <div class="text-muted">No Image</div>
+                                }
+                            </td>
+
+                            <td>@item.LastName</td>
+                            <td>@item.FirstMidName</td>
+                            <td>@item.EnrollmentDate.ToShortDateString()</td>
+
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge" style="background-color:#2f5b44;">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </td>
+
+                            <td class="text-center">
+                                <a class="btn btn-sm"
+                                   style="background-color:#1b3b2d; color:#f5f0e1;"
+                                   href="@Url.Action("Edit", new { id = item.ID })">Edit</a>
+
+                                <a class="btn btn-sm btn-secondary"
+                                   href="@Url.Action("Details", new { id = item.ID })">Details</a>
+
+                                <a class="btn btn-sm btn-danger"
+                                   href="@Url.Action("Delete", new { id = item.ID })">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div class="card-footer" style="background-color:#f5f0e1;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </div>
+
+                <div class="pagination-container">
+                    @Html.PagedListPager(
+                        Model,
+                        page => Url.Action("Index", new
+                        {
+                            page,
+                            sortOrder = ViewBag.CurrentSort,
+                            currentFilter = ViewBag.CurrentFilter
+                        }),
+                        new PagedListRenderOptions
+                        {
+                            Display = PagedListDisplayMode.Always,
+                            LiElementClasses = new[] { "page-item" },
+                            UlElementClasses = new[] { "pagination" }
+                        }
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #e7e2d3;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.85;
+    }
+
+    .pagination li a,
+    .pagination li span {
+        padding: .45rem .75rem;
+        border: 1px solid #ddd;
+        margin-left: -1px;
+        text-decoration: none;
+        background-color: white;
+        color: #1b3b2d;
+    }
+
+    .pagination li.active span {
+        background-color: #1b3b2d !important;
+        border-color: #1b3b2d !important;
+        color: #f5f0e1 !important;
+    }
+
+    .pagination li.disabled span {
+        color: #999;
+        background-color: #eee;
+    }
+</style>

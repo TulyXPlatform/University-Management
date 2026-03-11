@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title -DCU University Management</title>
+
+    <link rel="icon" type="image/png" href="~/Content/images/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="~/Content/images/favicon.png" />
+
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        body {
+            padding-top: 70px; /* adjust based on navbar height */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #1b3b2d;
+        }
+        /* dark greenish */
+        .navbar-brand, .nav-link {
+            color: #f5f0e1 !important;
+        }
+            /* creamy text */
+            .nav-link:hover {
+                color: #d9cfae !important;
+            }
+
+        footer {
+            background-color: #1b3b2d;
+            color: #f5f0e1;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        hr {
+            border-color: #d9cfae;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")"
+               style="display:flex; align-items:center; gap:10px;">
+
+                <img src="~/Content/images/favicon.png"
+                     alt="Logo"
+                     style="height:42px; width:auto;">
+            </a>
+
+            @Html.ActionLink("University Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+
+                    @* Role-based links *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin") || User.IsInRole("Teacher") || User.IsInRole("Student"))
+
+                        {
+
+                            <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Students", "Index", "Student", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Courses", "Index", "Course", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Instructors", "Index", "Instructor", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Departments", "Index", "Department", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Overview", "Index", "MasterDetail", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                    }
+                </ul>
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Dhaka Central University</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,66 @@
+﻿@using ContosoUniversity.Models
+@using Microsoft.AspNet.Identity.EntityFramework
+
+@model IEnumerable<ApplicationUser>
+@{
+    ViewBag.Title = "Manage User Roles";
+    var roles = ViewBag.Roles as IEnumerable<IdentityRole>;
+}
+
+<h2 style="color:#1b3b2d; margin-bottom:20px;">Manage Roles</h2>
+
+<table class="table" style="background-color:#f5f0e1; color:#1b3b2d; border:2px solid #1b3b2d;">
+    <thead style="background-color:#1b3b2d; color:#f5f0e1;">
+        <tr>
+            <th>Email</th>
+            <th>Current Role</th>
+            <th>Assign New Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            var currentRole = user.Roles.Any()
+                ? roles.First(r => r.Id == user.Roles.First().RoleId).Name
+                : "None";
+
+            <tr>
+                <td>@user.Email</td>
+                <td>@currentRole</td>
+                <td>
+                    <form method="post" action="/Admin/UpdateRole" class="d-flex align-items-center">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="roleName" class="form-control me-2" style="width:auto;">
+                            @foreach (var role in roles)
+                            {
+                                <option value="@role.Name">@role.Name</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .table th, .table td {
+        padding: 12px;
+        border-bottom: 1px solid #d9cfae;
+    }
+
+    .table tr:hover {
+        background-color: #e9e2cf;
+    }
+
+    .btn-primary {
+        background-color: #1b3b2d;
+        border-color: #1b3b2d;
+    }
+
+        .btn-primary:hover {
+            background-color: #2f5b44;
+            border-color: #2f5b44;
+        }
+</style>
